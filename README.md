@@ -1,2 +1,2 @@
-# CorePublicApi-PHP-Sample
-Sample code demonstrating OAuth and other features of Core Public API
+# CoreApi-PHP-Sample
+Sample code demonstrating OAuth and other features of Core API

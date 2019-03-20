@@ -2,15 +2,21 @@
    session_start();
    require_once('models/ActivityModel.php');
    require_once('business/ActivityManager.php');
+   require_once('business/AuthManager.php'); 
 
    $config = GeneralMethods::GetConfig();
    $ActivityManager = new ActivityManager();
+   $AuthManager = new AuthManager(); 
    $activity = new ActivityModel();
 
-   if(isset($_GET['id'])){ // load Activity
+   if(isset($_GET['id']) && !isset($_POST['submit'])){ // load Activity
     $activityResponse = $ActivityManager->Get($_GET['id']);
     if($activityResponse->header_code == 401){ // UnAuthorised
-      header("Location: ".$config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$config->ClientID."&response_type=code&scope=read:core%20readwrite:core%20openid%20offline_access&redirect_uri=".$config->RedirectURI);
+      $authResponse = $AuthManager->ReAuthorize();
+      if(isset($authResponse)){
+         $activityResponse = $ActivityManager->Get($_GET['id']);
+         $activity = json_decode($activityResponse->body);
+      }
     }
     else if($activityResponse->header_code == 200){ // Success 
       $activity = json_decode($activityResponse->body);
@@ -41,7 +47,20 @@
     
 
     if($activityResponse->header_code == 401){ // UnAuthorised
-      header("Location: ".$config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$config->ClientID."&response_type=code&scope=read:core%20readwrite:core%20openid%20offline_access&redirect_uri=".$config->RedirectURI);
+      $authResponse = $AuthManager->ReAuthorize();
+      if(isset($authResponse)){
+        if(isset($_GET['id'])){ //update
+          $activity->id = $_GET['id'];
+          $data = json_encode($activity);
+          $activityResponse = $ActivityManager->Update($activity->id,$data);
+        }
+        else { //create
+          $data = json_encode($activity);
+          $activityResponse = $ActivityManager->Create($data);
+        }
+        if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
+          header("Location: ActivityView.php");
+      }
     }
     else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
       header("Location: ActivityView.php");

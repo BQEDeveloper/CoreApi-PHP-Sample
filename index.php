@@ -7,43 +7,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Core Public API - PHP Sample</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Jquery -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body style="margin: 20px;">
+<h2 style="text-align:center">Core Public API - PHP Sample</h2>
+<div style="text-align:center;padding-top: 20px;">
+   <form method="post">
+      <input type="submit" class="btn btn-primary" name="btnConnectToCore" id="btnConnectToCore" value="Connect to Core API" />
+   </form>
+</div>
 <?php
+      require_once('business/AuthManager.php');
       require_once('models/AuthResponseModel.php');
-      require_once('models/ActivityModel.php');
-      require_once('shared/APIHelper.php'); 
       require_once('shared/GeneralMethods.php');
 
       $config = GeneralMethods::GetConfig();
           
-      $authResponse = new AuthResponseModel();      
+      $authResponse = new AuthResponseModel(); 
+      $AuthManager = new AuthManager();      
       
+      //Authenticate
       if(isset($_GET['code'])){
-         $headers = array(        
-            "content-type: application/x-www-form-urlencoded",
-         );
-         
-         $dataArray = array(
-            "code" => $_GET['code'],
-            "redirect_uri" => $config->RedirectURI,
-            "grant_type" => "authorization_code",
-            "client_id" => $config->ClientID,
-            "client_secret" => $config->Secret
-         );
-   
-         $data = http_build_query($dataArray);
-   
-         $authResponse = APIHelper::Post($config->CoreIdentityBaseUrl .'/connect/token',$data,$headers);
-
-         $_SESSION["AuthResponse"] = serialize(json_decode($authResponse->body));
-         
+         $AuthManager->Authorize($_GET['code']);                  
       }      
 
-      header("Location: ActivityView.php");
-     
-
-       
+      if(GeneralMethods::GetAuthResponse() != null)
+         header("Location: ActivityView.php");
+      
+      //Connect To Core
+      if(array_key_exists('btnConnectToCore',$_POST)){
+         $AuthManager->ConnectToCore();
+      }  
+      
 ?>
 </body>
 </html>

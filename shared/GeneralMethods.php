@@ -14,5 +14,25 @@
             
             return $config;
         }
+
+        public static function SaveAuthResponse($authResponse) {
+            $AuthResponseFile = fopen("AuthResponse.ini", "w+") or die("Unable to open file!");
+            fwrite($AuthResponseFile, serialize(json_decode($authResponse)));
+            fclose($AuthResponseFile);
+        }
+
+        public static function GetAuthResponse() {
+            try{            
+                $AuthResponseFile = fopen("AuthResponse.ini", "r+") or die("Unable to open file!");
+                $authResponse =  fread($AuthResponseFile,6000);
+                fclose($AuthResponseFile);
+                return unserialize($authResponse);                                         
+            }
+            catch(Exception $ex)
+            {
+
+            }
+        }
+
     }
 ?>

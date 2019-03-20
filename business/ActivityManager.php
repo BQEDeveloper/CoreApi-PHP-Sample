@@ -15,8 +15,8 @@
           
          $this->authResponse = new AuthResponseModel(); 
 
-         if(isset($_SESSION["AuthResponse"]) && unserialize($_SESSION["AuthResponse"])!= null)
-            $this->authResponse = unserialize($_SESSION["AuthResponse"]);
+         if(GeneralMethods::GetAuthResponse() != null)
+            $this->authResponse = GeneralMethods::GetAuthResponse();
  
             $this->headers = array( 
                "accept: application/json",       

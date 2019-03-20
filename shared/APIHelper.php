@@ -1,6 +1,6 @@
 <?php
-    require_once('models/CurlModel.php');
-    require_once('models/HttpResponseModel.php'); 
+    require_once(realpath(__DIR__ . '/..').'/models/CurlModel.php');
+    require_once(realpath(__DIR__ . '/..').'/models/HttpResponseModel.php'); 
 
     class APIHelper {    
 

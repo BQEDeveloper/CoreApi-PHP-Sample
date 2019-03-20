@@ -1,8 +1,8 @@
 <?php
-    require_once('models/AuthResponseModel.php');
-    require_once('models/ActivityModel.php');
-    require_once('shared/APIHelper.php'); 
-    require_once('shared/GeneralMethods.php');
+    require_once('../models/AuthResponseModel.php');
+    require_once('../models/ActivityModel.php');
+    require_once('../shared/APIHelper.php'); 
+    require_once('../shared/GeneralMethods.php');
 
     class ActivityManager {
 

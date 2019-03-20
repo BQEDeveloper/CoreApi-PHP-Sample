@@ -23,12 +23,9 @@
 </div>
 <?php
       require_once('business/AuthManager.php');
-      require_once('models/AuthResponseModel.php');
       require_once('shared/GeneralMethods.php');
 
-      $config = GeneralMethods::GetConfig();
-          
-      $authResponse = new AuthResponseModel(); 
+      $config = GeneralMethods::GetConfig();          
       $AuthManager = new AuthManager();      
       
       //Authenticate
@@ -36,8 +33,11 @@
          $AuthManager->Authorize($_GET['code']);                  
       }      
 
-      if(GeneralMethods::GetAuthResponse() != null)
-         header("Location: ActivityView.php");
+      //Load Activity List
+      if(GeneralMethods::GetAuthResponse() != null){
+         header("Location: views/ActivityListView.php");
+         exit();
+      }
       
       //Connect To Core
       if(array_key_exists('btnConnectToCore',$_POST)){

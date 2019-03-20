@@ -20,7 +20,7 @@
       }
       function deleteActivity(id) {
          window.open(
-            "DeleteActivity.php?id="+encodeURI(id),"_self");
+            "DeleteActivityView.php?id="+encodeURI(id),"_self");
       }
    </script>
 </head>
@@ -36,8 +36,8 @@
 </div>
 <h3>Activities List</h3>
 <?php
-    require_once('business/ActivityManager.php');
-    require_once('business/AuthManager.php');    
+    require_once(realpath(__DIR__ . '/..').'/business/ActivityManager.php');
+    require_once(realpath(__DIR__ . '/..').'/business/AuthManager.php');    
 
     $config = GeneralMethods::GetConfig(); 
     $ActivityManager = new ActivityManager(); 

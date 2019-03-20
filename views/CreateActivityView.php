@@ -1,15 +1,16 @@
 <?php
    session_start();
-   require_once('models/ActivityModel.php');
-   require_once('business/ActivityManager.php');
-   require_once('business/AuthManager.php'); 
+   require_once(realpath(__DIR__ . '/..').'/models/ActivityModel.php');
+   require_once(realpath(__DIR__ . '/..').'/business/ActivityManager.php');
+   require_once(realpath(__DIR__ . '/..').'/business/AuthManager.php'); 
 
    $config = GeneralMethods::GetConfig();
    $ActivityManager = new ActivityManager();
    $AuthManager = new AuthManager(); 
    $activity = new ActivityModel();
 
-   if(isset($_GET['id']) && !isset($_POST['submit'])){ // load Activity
+   // Load Activity
+   if(isset($_GET['id']) && !isset($_POST['submit'])){ 
     $activityResponse = $ActivityManager->Get($_GET['id']);
     if($activityResponse->header_code == 401){ // UnAuthorised
       $authResponse = $AuthManager->ReAuthorize();
@@ -26,49 +27,47 @@
     }  
    }
 
-   if(isset($_POST['submit'])){ //check if form was submitted
+   //Check if form was submitted for Update / Create 
+   if(isset($_POST['submit'])){ 
     
-    $activity->code = $_POST['code'];
-    $activity->description = $_POST['description'];
-    $activity->billRate = $_POST['billRate'];
-    $activity->costRate = $_POST['costRate'];
-    $activity->billable = isset($_POST['isBillable']) ? true : false;      
+      $activity->code = $_POST['code'];
+      $activity->description = $_POST['description'];
+      $activity->billRate = $_POST['billRate'];
+      $activity->costRate = $_POST['costRate'];
+      $activity->billable = isset($_POST['isBillable']) ? true : false;      
 
-    if(isset($_GET['id'])){ //update
-      $activity->id = $_GET['id'];
-      $data = json_encode($activity);
-      $activityResponse = $ActivityManager->Update($activity->id,$data);
-    }
-    else { //create
-      $data = json_encode($activity);
-      $activityResponse = $ActivityManager->Create($data);
-    }
-
-    
-
-    if($activityResponse->header_code == 401){ // UnAuthorised
-      $authResponse = $AuthManager->ReAuthorize();
-      if(isset($authResponse)){
-        if(isset($_GET['id'])){ //update
-          $activity->id = $_GET['id'];
-          $data = json_encode($activity);
-          $activityResponse = $ActivityManager->Update($activity->id,$data);
-        }
-        else { //create
-          $data = json_encode($activity);
-          $activityResponse = $ActivityManager->Create($data);
-        }
-        if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
-          header("Location: ActivityView.php");
+      if(isset($_GET['id'])){ //update
+        $activity->id = $_GET['id'];
+        $data = json_encode($activity);
+        $activityResponse = $ActivityManager->Update($activity->id,$data);
       }
-    }
-    else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
-      header("Location: ActivityView.php");
-    } 
-    else {
-      echo "<p style='color:red'>".$activityResponse->body."</p>";
-    }  
+      else { //create
+        $data = json_encode($activity);
+        $activityResponse = $ActivityManager->Create($data);
+      }
 
+      if($activityResponse->header_code == 401){ // UnAuthorised
+        $authResponse = $AuthManager->ReAuthorize();
+        if(isset($authResponse)){
+          if(isset($_GET['id'])){ //update
+            $activity->id = $_GET['id'];
+            $data = json_encode($activity);
+            $activityResponse = $ActivityManager->Update($activity->id,$data);
+          }
+          else { //create
+            $data = json_encode($activity);
+            $activityResponse = $ActivityManager->Create($data);
+          }
+          if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
+            header("Location: ActivityListView.php");
+        }
+      }
+      else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
+        header("Location: ActivityListView.php");
+      } 
+      else {
+        echo "<p style='color:red'>".$activityResponse->body."</p>";
+      }  
   }
 ?>
 <!DOCTYPE html>
@@ -86,7 +85,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body style="margin: 20px;">
-  <a href="ActivityView.php" class="col-sm-10 col-sm-offset-2">Back to List</a>
+  <a href="ActivityListView.php" class="col-sm-10 col-sm-offset-2">Back to List</a>
   <form class="form-horizontal" method="post" style="padding-top: 50px;" action="">
     <div class="form-group">
       <label class="control-label col-sm-2" >Code: *</label>

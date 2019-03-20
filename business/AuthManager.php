@@ -1,7 +1,7 @@
 <?php
-    require_once('models/AuthResponseModel.php');
-    require_once('shared/APIHelper.php'); 
-    require_once('shared/GeneralMethods.php');
+    require_once(realpath(__DIR__ . '/..').'/models/AuthResponseModel.php');
+    require_once(realpath(__DIR__ . '/..').'/shared/APIHelper.php'); 
+    require_once(realpath(__DIR__ . '/..').'/shared/GeneralMethods.php');
 
     class AuthManager {
 
@@ -30,7 +30,7 @@
 
       function DisconnectFromCore() {
          GeneralMethods::SaveAuthResponse('');
-         header("Location: index.php");
+         header("Location: ../index.php");
       }
 
       function Authorize($code) {

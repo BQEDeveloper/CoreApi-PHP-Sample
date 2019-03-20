@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Core Public API - PHP Sample</title>
+    <title>Core API - PHP Sample</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- Jquery -->
     <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 <body style="margin: 20px;">
-<h2 style="text-align:center">Core Public API - PHP Sample</h2>
+<h2 style="text-align:center">Core API - PHP Sample</h2>
 <div style="text-align:center;padding-top: 20px;">
    <form method="post">
       <input type="submit" class="btn btn-primary" name="btnConnectToCore" id="btnConnectToCore" value="Connect to Core API" />

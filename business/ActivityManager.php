@@ -26,7 +26,7 @@
       }
 
       function GetList() {
-         return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/query?page=number=1,size=1000',$this->headers);
+         return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/query?page=number=1,size=1000&orderby=name',$this->headers);
       }
 
       function Get($id) {

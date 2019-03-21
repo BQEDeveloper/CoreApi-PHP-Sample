@@ -20,11 +20,11 @@ A php environment comprising of apache and tomcat. Xampp may be the best source 
 
 ## Contributers
 
-[Arif Nazir] (https://github.com/arifnazir) Dev Lead BQE.
+[Arif Nazir](https://github.com/arifnazir)
 
 
 ## Authors
 
-[Umer Hafeez](https://github.com/PurpleBooth)
+[Umer Hafeez](https://github.com/UmerHafeez)
 
 

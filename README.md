@@ -6,7 +6,7 @@ Sample code demonstrating OAuth and other features of Core API.
 
 1. Clone the CoreAPI-PHP-Sample project on your local environment.
 2. Go to Config.ini, insert the client secret, clientID and redirectURI of you app. Please note the redirectURI should point to the index.php file of the project
-e.g. if you are running PHP on your localhost with port 1111, the rediretURI might look something like http://localhost:1111/CoreApi-PHP-Sample
+e.g. if you are running PHP on your localhost with port 1111, the redirectURI might look something like http://localhost:1111/CoreApi-PHP-Sample
 3. Run the project. 
 
 ### Prerequisites

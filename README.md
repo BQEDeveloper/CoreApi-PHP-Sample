@@ -19,12 +19,11 @@ A PHP environment comprising of Apache and Tomcat. Install Xampp pacakge.
 * [PHP 5.6](http://php.net/releases/5_6_0.php)
 
 ## Contributers
-
-[Arif Nazir](https://github.com/arifnazir)
-
-
-## Authors
-
 [Umer Hafeez](https://github.com/Umer-Hafeez)
+
+
+
+## Author
+[Arif Nazir](https://github.com/arifnazir)
 
 

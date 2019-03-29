@@ -15,6 +15,7 @@
     if($activityResponse->header_code == 401){ // UnAuthorised
       $authResponse = $AuthManager->ReAuthorize();
       if(isset($authResponse)){
+         $ActivityManager = new ActivityManager();
          $activityResponse = $ActivityManager->Get($_GET['id']);
          $activity = json_decode($activityResponse->body);
       }
@@ -52,6 +53,7 @@
           if(isset($_GET['id'])){ //update
             $activity->id = $_GET['id'];
             $data = json_encode($activity);
+            $ActivityManager = new ActivityManager();
             $activityResponse = $ActivityManager->Update($activity->id,$data);
           }
           else { //create

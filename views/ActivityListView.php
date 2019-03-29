@@ -25,7 +25,7 @@
    </script>
 </head>
 <body style="margin: 20px;">
-<h2 style="text-align:center">Core Public API - PHP Sample</h2>
+<h2 style="text-align:center">Core API - PHP Sample</h2>
 <div style="text-align:center">
    <form method="post">
          <input type="submit" class="btn btn-danger" name="btnDisconnectFromCore" id="btnDisconnectFromCore" value="Disconnect from Core" />
@@ -55,6 +55,7 @@
     if($activityListResponse->header_code == 401){ // UnAuthorised       
       $authResponse = $AuthManager->ReAuthorize();
       if(isset($authResponse)){
+         $ActivityManager = new ActivityManager();
          $activityListResponse = $ActivityManager->GetList();
          $activityList = json_decode($activityListResponse->body);
          PrintList($activityList);

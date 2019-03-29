@@ -13,6 +13,7 @@
       if($activityResponse->header_code == 401){ // UnAuthorised
         $authResponse = $AuthManager->ReAuthorize();
         if(isset($authResponse)){
+          $ActivityManager = new ActivityManager();
           $activityResponse = $ActivityManager->Delete($_GET['id']);
           if($activityResponse->header_code == 200 || $activityResponse->header_code == 204) // Success or No Content
             header("Location: ActivityListView.php");

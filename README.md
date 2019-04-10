@@ -11,7 +11,7 @@ e.g. if you are running PHP on your localhost with port 1111, the redirectURI mi
 
 ### Prerequisites
 
-A PHP environment comprising of Apache or Tomcat. You can download them from [Xampp](https://www.apachefriends.org/download.html).
+A PHP environment comprising of Apache. You can download them from [Xampp](https://www.apachefriends.org/download.html).
 
 
 ## Built With

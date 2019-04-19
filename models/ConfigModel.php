@@ -5,5 +5,6 @@
         public $Secret;
         public $ClientID;
         public $RedirectURI;
+        public $Scopes;
     }
 ?>

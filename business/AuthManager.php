@@ -25,7 +25,7 @@
       }
 
       function ConnectToCore() {
-         header("Location: ".$this->config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$this->config->ClientID."&response_type=code&scope=read:core%20readwrite:core%20openid%20offline_access&redirect_uri=".$this->config->RedirectURI);
+         header("Location: ".$this->config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$this->config->ClientID."&response_type=code&scope=".$this->config->Scopes."&redirect_uri=".$this->config->RedirectURI);
       }
 
       function DisconnectFromCore() {

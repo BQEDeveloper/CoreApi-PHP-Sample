@@ -11,6 +11,7 @@
             $config->Secret = $configArray["Secret"];
             $config->ClientID = $configArray["ClientID"];
             $config->RedirectURI = $configArray["RedirectURI"];
+            $config->Scopes = $configArray["Scopes"];
             
             return $config;
         }

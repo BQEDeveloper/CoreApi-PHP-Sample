@@ -29,8 +29,23 @@
       }
 
       function DisconnectFromCore() {
-         GeneralMethods::SaveAuthResponse('');
-         header("Location: ../index.php");
+         $this->headers = array(        
+            "content-type: application/x-www-form-urlencoded",
+         );
+         
+         $dataArray = array(
+            "token" => $this->authResponse->access_token,
+            "client_id" => $this->config->ClientID,
+            "client_secret" => $this->config->Secret
+         );
+
+         $data = http_build_query($dataArray);
+
+         $this->authResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/revocation',$data,$this->headers);
+         if($this->authResponse->header_code == 200){
+            GeneralMethods::SaveAuthResponse('');
+            header("Location: ../index.php");
+         }
       }
 
       function Authorize($code) {

@@ -26,7 +26,12 @@
       }
 
       function GetUserInfo() {
-         return APIHelper::Get($this->config->CoreIdentityBaseUrl.'/connect/userinfo',$this->headers);
+         try {
+            return APIHelper::Get($this->config->CoreIdentityBaseUrl.'/connect/userinfo',$this->headers);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
     }
 

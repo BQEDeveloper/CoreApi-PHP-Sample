@@ -26,23 +26,48 @@
       }
 
       function GetList() {
-         return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/query?page=number=1,size=1000&orderby=name',$this->headers);
+         try{
+            return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/query?page=number=1,size=1000&orderby=name',$this->headers);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
 
       function Get($id) {
-         return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->headers);
+         try{         
+            return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->headers);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
 
-      function Create($data) {         
-         return APIHelper::Post($this->config->CoreAPIBaseUrl.'/activity',$data,$this->headers);
+      function Create($data) {   
+         try {      
+            return APIHelper::Post($this->config->CoreAPIBaseUrl.'/activity',$data,$this->headers);         
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
 
-      function Update($id,$data) {         
-         return APIHelper::Put($this->config->CoreAPIBaseUrl.'/activity/'.$id,$data,$this->headers);
+      function Update($id,$data) {
+         try {         
+            return APIHelper::Put($this->config->CoreAPIBaseUrl.'/activity/'.$id,$data,$this->headers);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
 
-      function Delete($id) {         
-         return APIHelper::Delete($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->headers);
+      function Delete($id) {  
+         try {       
+            return APIHelper::Delete($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->headers);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
       }
     }
 

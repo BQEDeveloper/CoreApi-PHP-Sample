@@ -25,7 +25,9 @@
       }
 
       function ConnectToCore() {
-         header("Location: ".$this->config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$this->config->ClientID."&response_type=code&scope=".$this->config->Scopes."&redirect_uri=".$this->config->RedirectURI);
+         $state = urlencode(GeneralMethods::GenerateRandomString());         
+         $_SESSION['state'] = $state;
+         header("Location: ".$this->config->CoreIdentityBaseUrl."/connect/authorize?client_id=".$this->config->ClientID."&response_type=code&scope=".$this->config->Scopes."&redirect_uri=".$this->config->RedirectURI."&state=".$state);
       }
 
       function DisconnectFromCore() {

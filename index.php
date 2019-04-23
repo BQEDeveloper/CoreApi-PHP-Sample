@@ -30,7 +30,11 @@
       
       //Authenticate
       if(isset($_GET['code'])){
-         $AuthManager->Authorize($_GET['code']);                  
+         $state = urlencode($_GET['state']);
+         if($state == $_SESSION['state'])
+            $AuthManager->Authorize($_GET['code']);                  
+         else
+            throw new Exception("State Parameter returned doesn't match to the one sent to Core OAuth Server.");
       }      
 
       //Load Activity List

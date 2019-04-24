@@ -7,12 +7,14 @@
 
       public $config;
       public $authResponse;
+      public $httpResponse;
       public $headers;
 
       function __Construct() {
          $this->config = GeneralMethods::GetConfig();
           
-         $this->authResponse = new AuthResponseModel(); 
+         $this->authResponse = new AuthResponseModel();
+         $this->httpResponse = new HttpResponseModel(); 
 
          if(GeneralMethods::GetAuthResponse() != null)
             $this->authResponse = GeneralMethods::GetAuthResponse();
@@ -44,8 +46,8 @@
 
             $data = http_build_query($dataArray);
 
-            $this->authResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/revocation',$data,$this->headers);
-            if($this->authResponse->header_code == 200){
+            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/revocation',$data,$this->headers);
+            if($this->httpResponse->header_code == 200){
                GeneralMethods::SaveAuthResponse('');
                header("Location: ../index.php");
             }
@@ -71,10 +73,12 @@
       
             $data = http_build_query($dataArray);
       
-            $this->authResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->headers);
+            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->headers);
 
-            if($this->authResponse->header_code == 200) 
-               GeneralMethods::SaveAuthResponse($this->authResponse->body);
+            if($this->httpResponse->header_code == 200) {
+               $this->authResponse =  json_decode($this->httpResponse->body);
+               GeneralMethods::SaveAuthResponse($this->authResponse);
+            }
 
             return $this->authResponse;
          }
@@ -101,15 +105,26 @@
 
                $data = http_build_query($dataArray);
 
-               $this->authResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$headers);
+               $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$headers);
 
-               if($this->authResponse->header_code == 200) 
-                  GeneralMethods::SaveAuthResponse($this->authResponse->body);
+               if($this->httpResponse->header_code == 200) {
+                  $this->authResponse =  json_decode($this->httpResponse->body);
+                  GeneralMethods::SaveAuthResponse($this->authResponse);
+               }
 
                return $this->authResponse;
             }
          }
          catch(Exception $ex){
+            throw $ex;
+         }
+      }
+
+      function IsValidState($state) {
+         try {
+            return urlencode($state) == $_SESSION['state'] ? true : false;
+         }
+         catch(Exception $ex) {
             throw $ex;
          }
       }

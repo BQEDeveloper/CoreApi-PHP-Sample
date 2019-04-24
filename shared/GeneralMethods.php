@@ -24,7 +24,7 @@
         public static function SaveAuthResponse($authResponse) {
             try{
                 $AuthResponseFile = fopen(realpath(__DIR__ . '/..')."/AuthResponse.ini", "w+") or die("Unable to open file!");
-                fwrite($AuthResponseFile, serialize(json_decode($authResponse)));
+                fwrite($AuthResponseFile, serialize($authResponse));
                 fclose($AuthResponseFile);
             }
             catch(Exception $ex){

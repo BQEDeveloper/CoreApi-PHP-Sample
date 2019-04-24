@@ -30,8 +30,8 @@
       
       //Authenticate
       if(isset($_GET['code'])){
-         $state = urlencode($_GET['state']);
-         if($state == $_SESSION['state'])
+         //verfiy that the state parameter returned by the server is the same that was sent earlier.
+         if($AuthManager->IsValidState($_GET['state']))
             $AuthManager->Authorize($_GET['code']);                  
          else
             throw new Exception("State Parameter returned doesn't match to the one sent to Core OAuth Server.");

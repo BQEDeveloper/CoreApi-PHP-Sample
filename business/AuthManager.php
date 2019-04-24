@@ -19,11 +19,11 @@
          if(GeneralMethods::GetAuthResponse() != null)
             $this->authResponse = GeneralMethods::GetAuthResponse();
  
-            $this->headers = array( 
-               "accept: application/json",       
-               "authorization: Bearer " . $this->authResponse->access_token,
-               "content-type: application/json",
-            );
+         $this->headers = array( 
+            "accept: application/json",       
+            "authorization: Bearer " . $this->authResponse->access_token,
+            "content-type: application/json",
+         );
       }
 
       function ConnectToCore() {
@@ -73,12 +73,12 @@
       
             $data = http_build_query($dataArray);
       
-            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->headers);
+             $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->headers);
 
-            if($this->httpResponse->header_code == 200) {
-               $this->authResponse =  json_decode($this->httpResponse->body);
-               GeneralMethods::SaveAuthResponse($this->authResponse);
-            }
+            if($this->httpResponse->header_code == 200)
+               $this->authResponse =  json_decode($this->httpResponse->body);                           
+            else 
+               throw new Exception($this->httpResponse);
 
             return $this->authResponse;
          }

@@ -1,75 +1,80 @@
 <?php
-   session_start();
-   require_once(realpath(__DIR__ . '/..').'/models/ActivityModel.php');
-   require_once(realpath(__DIR__ . '/..').'/business/ActivityManager.php');
-   require_once(realpath(__DIR__ . '/..').'/business/AuthManager.php'); 
+  try{
+    session_start();
+    require_once(realpath(__DIR__ . '/..').'/models/ActivityModel.php');
+    require_once(realpath(__DIR__ . '/..').'/business/ActivityManager.php');
+    require_once(realpath(__DIR__ . '/..').'/business/AuthManager.php'); 
 
-   $config = GeneralMethods::GetConfig();
-   $ActivityManager = new ActivityManager();
-   $AuthManager = new AuthManager(); 
-   $activity = new ActivityModel();
+    $config = GeneralMethods::GetConfig();
+    $ActivityManager = new ActivityManager();
+    $AuthManager = new AuthManager(); 
+    $activity = new ActivityModel();
 
-   // Load Activity
-   if(isset($_GET['id']) && !isset($_POST['submit'])){ 
-    $activityResponse = $ActivityManager->Get($_GET['id']);
-    if($activityResponse->header_code == 401){ // UnAuthorised
-      $authResponse = $AuthManager->ReAuthorize();
-      if(isset($authResponse)){
-         $ActivityManager = new ActivityManager();
-         $activityResponse = $ActivityManager->Get($_GET['id']);
-         $activity = json_decode($activityResponse->body);
-      }
-    }
-    else if($activityResponse->header_code == 200){ // Success 
-      $activity = json_decode($activityResponse->body);
-    } 
-    else {
-      echo "<p style='color:red'>".$activityResponse->body."</p>";
-    }  
-   }
-
-   //Check if form was submitted for Update / Create 
-   if(isset($_POST['submit'])){ 
-    
-      $activity->code = $_POST['code'];
-      $activity->description = $_POST['description'];
-      $activity->billRate = $_POST['billRate'];
-      $activity->costRate = $_POST['costRate'];
-      $activity->billable = isset($_POST['isBillable']) ? true : false;      
-
-      if(isset($_GET['id'])){ //update
-        $activity->id = $_GET['id'];
-        $data = json_encode($activity);
-        $activityResponse = $ActivityManager->Update($activity->id,$data);
-      }
-      else { //create
-        $data = json_encode($activity);
-        $activityResponse = $ActivityManager->Create($data);
-      }
-
+    // Load Activity
+    if(isset($_GET['id']) && !isset($_POST['submit'])){ 
+      $activityResponse = $ActivityManager->Get($_GET['id']);
       if($activityResponse->header_code == 401){ // UnAuthorised
         $authResponse = $AuthManager->ReAuthorize();
         if(isset($authResponse)){
-          if(isset($_GET['id'])){ //update
-            $activity->id = $_GET['id'];
-            $data = json_encode($activity);
-            $ActivityManager = new ActivityManager();
-            $activityResponse = $ActivityManager->Update($activity->id,$data);
-          }
-          else { //create
-            $data = json_encode($activity);
-            $activityResponse = $ActivityManager->Create($data);
-          }
-          if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
-            header("Location: ActivityListView.php");
+          $ActivityManager = new ActivityManager();
+          $activityResponse = $ActivityManager->Get($_GET['id']);
+          $activity = json_decode($activityResponse->body);
         }
       }
-      else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
-        header("Location: ActivityListView.php");
+      else if($activityResponse->header_code == 200){ // Success 
+        $activity = json_decode($activityResponse->body);
       } 
       else {
         echo "<p style='color:red'>".$activityResponse->body."</p>";
       }  
+    }
+
+    //Check if form was submitted for Update / Create 
+    if(isset($_POST['submit'])){ 
+      
+        $activity->code = $_POST['code'];
+        $activity->description = $_POST['description'];
+        $activity->billRate = $_POST['billRate'];
+        $activity->costRate = $_POST['costRate'];
+        $activity->billable = isset($_POST['isBillable']) ? true : false;      
+
+        if(isset($_GET['id'])){ //update
+          $activity->id = $_GET['id'];
+          $data = json_encode($activity);
+          $activityResponse = $ActivityManager->Update($activity->id,$data);
+        }
+        else { //create
+          $data = json_encode($activity);
+          $activityResponse = $ActivityManager->Create($data);
+        }
+
+        if($activityResponse->header_code == 401){ // UnAuthorised
+          $authResponse = $AuthManager->ReAuthorize();
+          if(isset($authResponse)){
+            if(isset($_GET['id'])){ //update
+              $activity->id = $_GET['id'];
+              $data = json_encode($activity);
+              $ActivityManager = new ActivityManager();
+              $activityResponse = $ActivityManager->Update($activity->id,$data);
+            }
+            else { //create
+              $data = json_encode($activity);
+              $activityResponse = $ActivityManager->Create($data);
+            }
+            if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
+              header("Location: ActivityListView.php");
+          }
+        }
+        else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
+          header("Location: ActivityListView.php");
+        } 
+        else {
+          echo "<p style='color:red'>".$activityResponse->body."</p>";
+        }  
+    }
+  }
+  catch(Exception $ex){
+    echo $ex->getMessage();
   }
 ?>
 <!DOCTYPE html>

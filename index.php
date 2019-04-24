@@ -22,19 +22,34 @@
    </form>
 </div>
 <?php
+   try {
       require_once('business/AuthManager.php');
+      require_once('business/JWTManager.php');
       require_once('shared/GeneralMethods.php');
+      require_once('models/JWTModel.php');
+      require_once('models/AuthResponseModel.php');
 
-      $config = GeneralMethods::GetConfig();          
-      $AuthManager = new AuthManager();      
+      $config = GeneralMethods::GetConfig();   
+
+      $AuthManager = new AuthManager();            
+      $JWTManager = new JWTManager($config);
+      $authResponse = new AuthResponseModel();
+      $jwt = new JWTModel();
       
-      //Authenticate
+      //Authenticate (Code Exchange)
       if(isset($_GET['code'])){
          //verfiy that the state parameter returned by the server is the same that was sent earlier.
-         if($AuthManager->IsValidState($_GET['state']))
-            $AuthManager->Authorize($_GET['code']);                  
+         if($AuthManager->IsValidState($_GET['state'])){
+            $authResponse = $AuthManager->Authorize($_GET['code']);
+            //Decode id_token (JWT)     
+            $jwt = $JWTManager->DecodeJWT($authResponse->id_token);
+            //Validate the Decoded Token
+            $JWTManager->ValidateJWT($jwt);
+            //Save Auth Response
+            GeneralMethods::SaveAuthResponse($authResponse);
+         }             
          else
-            throw new Exception("State Parameter returned doesn't match to the one sent to Core OAuth Server.");
+            throw new Exception("State Parameter returned doesn't match to the one sent to Core API Server.");
       }      
 
       //Load Activity List
@@ -47,7 +62,10 @@
       if(array_key_exists('btnConnectToCore',$_POST)){
          $AuthManager->ConnectToCore();
       }  
-      
+   }
+   catch(Exception $ex){
+      echo $ex->getMessage();
+   }   
 ?>
 </body>
 </html>

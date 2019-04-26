@@ -5,6 +5,7 @@
         public $kid;
         public $e;
         public $n;
+        public $x5c = array();
         public $alg;        
     }
 ?>

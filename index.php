@@ -31,8 +31,7 @@
 
       $config = GeneralMethods::GetConfig();   
 
-      $AuthManager = new AuthManager();            
-      $JWTManager = new JWTManager($config);
+      $AuthManager = new AuthManager();                  
       $authResponse = new AuthResponseModel();
       $jwt = new JWTModel();
       
@@ -40,13 +39,17 @@
       if(isset($_GET['code'])){
          //verfiy that the state parameter returned by the server is the same that was sent earlier.
          if($AuthManager->IsValidState($_GET['state'])){
-            $authResponse = $AuthManager->Authorize($_GET['code']);
+            $authResponse = $AuthManager->Authorize($_GET['code']);            
+            $JWTManager = new JWTManager($config,$authResponse->id_token);
             //Decode id_token (JWT)     
-            $jwt = $JWTManager->DecodeJWT($authResponse->id_token);
+            $jwt = $JWTManager->DecodeJWT();
             //Validate the Decoded Token
-            $JWTManager->ValidateJWT($jwt);
-            //Save Auth Response
-            GeneralMethods::SaveAuthResponse($authResponse);
+            if($JWTManager->ValidateJWT($jwt)){
+               //Save Auth Response
+               GeneralMethods::SaveAuthResponse($authResponse);
+            }
+            else
+               throw new Exception("Invalid JWT.");
          }             
          else
             throw new Exception("State Parameter returned doesn't match to the one sent to Core API Server.");
@@ -64,7 +67,7 @@
       }  
    }
    catch(Exception $ex){
-      echo $ex->getMessage();
+      echo "<div style='color:red'>" . $ex->getMessage() . "</div>";
    }   
 ?>
 </body>

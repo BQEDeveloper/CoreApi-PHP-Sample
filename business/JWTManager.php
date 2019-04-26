@@ -3,17 +3,21 @@
     require_once(realpath(__DIR__ . '/..').'/models/JWKSModel.php');
     require_once(realpath(__DIR__ . '/..').'/shared/APIHelper.php'); 
     require_once(realpath(__DIR__ . '/..').'/shared/GeneralMethods.php');
+    require_once(realpath(__DIR__ . '/..').'/packages/phpseclib/Crypt/RSA.php');
+    require_once(realpath(__DIR__ . './..').'/packages/phpseclib/Crypt/Math/BigInteger.php');
 
     class JWTManager {
 
       public $config;      
       public $httpResponse;
+      public $id_token;
       public $jwt;
       public $jwks;
       public $headers;
 
-      function __Construct($config) {
+      function __Construct($config, $id_token) {
          $this->config = $config;
+         $this->id_token = $id_token;
           
          $this->httpResponse = new HttpResponseModel(); 
          $this->jwt = new JWTModel();
@@ -23,15 +27,19 @@
             "accept: application/json",       
             "content-type: application/json",
          );
+
+         $this->httpResponse = APIHelper::Get($this->config->CoreIdentityBaseUrl .'/.well-known/openid-configuration/jwks',$this->headers);
+         $this->jwks =  json_decode($this->httpResponse->body)->keys[0];
+         
       }
 
-      function DecodeJWT($id_token) {
+      function DecodeJWT() {
          try {
          
-            list($header,$payload,$signature) = explode('.',$id_token);
-            $this->jwt->header = json_decode(base64_decode($header));
-            $this->jwt->payload = json_decode(base64_decode($payload));
-            $this->jwt->signature = json_decode(base64_decode($signature));
+            list($header,$payload,$signature) = explode('.',$this->id_token);
+            $this->jwt->header = json_decode(GeneralMethods::Base64UrlDecode($header));
+            $this->jwt->payload = json_decode(GeneralMethods::Base64UrlDecode($payload));
+            $this->jwt->signature = GeneralMethods::Base64UrlDecode($signature);
 
             return $this->jwt;
          }
@@ -51,10 +59,7 @@
       }
 
       private function ValidateJWTHeader() {
-         try {
-            
-            $this->httpResponse = APIHelper::Get($this->config->CoreIdentityBaseUrl .'/.well-known/openid-configuration/jwks',$this->headers);
-            $this->jwks =  json_decode($this->httpResponse->body)->keys[0];
+         try {            
 
             //verify whether algorithm mentioned in Id Token (JWT) matches to the one in JWKS
             if($this->jwt->header->alg != $this->jwks->alg)
@@ -91,10 +96,22 @@
 
       private function VerifyJWTSingature() {
          try {
-            
+            $rsa = new Crypt_RSA();
+            $rsa->loadKey([
+               'e' => new Math_BigInteger(GeneralMethods::Base64UrlDecode($this->jwks->e), 256),
+               'n' => new Math_BigInteger(GeneralMethods::Base64UrlDecode($this->jwks->n), 256)
+            ]);
 
+            $publickey = $rsa->getPublicKey();
 
-            return true;
+            list($header,$payload,$signature) = explode('.',$this->id_token);
+
+            $message = $header.".".$payload;
+
+            $signature = GeneralMethods::Base64UrlDecode($signature);
+
+            return $rsa->VerifySignature($message, $signature, $publickey, $this->jwt->header->alg);
+
          }
          catch(Exception $ex) {
             throw $ex;

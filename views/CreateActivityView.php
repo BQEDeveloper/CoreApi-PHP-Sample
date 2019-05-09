@@ -14,6 +14,7 @@
     if(isset($_GET['id']) && !isset($_POST['submit'])){ 
       $activityResponse = $ActivityManager->Get($_GET['id']);
       if($activityResponse->header_code == 401){ // UnAuthorised
+        $AuthManager = new AuthManager(); 
         $authResponse = $AuthManager->ReAuthorize();
         if(isset($authResponse)){
           $ActivityManager = new ActivityManager();
@@ -49,6 +50,7 @@
         }
 
         if($activityResponse->header_code == 401){ // UnAuthorised
+          $AuthManager = new AuthManager();
           $authResponse = $AuthManager->ReAuthorize();
           if(isset($authResponse)){
             if(isset($_GET['id'])){ //update

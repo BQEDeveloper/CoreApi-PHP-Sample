@@ -37,7 +37,8 @@
       $UserInfoManager = new UserInfoManager();
       $userInfoResponse = $UserInfoManager->GetUserInfo();  
             
-      if($userInfoResponse->header_code == 401){ // UnAuthorised       
+      if($userInfoResponse->header_code == 401){ // UnAuthorised  
+         $AuthManager = new AuthManager();     
          $authResponse = $AuthManager->ReAuthorize();
          if(isset($authResponse)){
             $UserInfoManager = new UserInfoManager();
@@ -80,7 +81,8 @@
 
          $activityListResponse = $ActivityManager->GetList();    
 
-         if($activityListResponse->header_code == 401){ // UnAuthorised       
+         if($activityListResponse->header_code == 401){ // UnAuthorised    
+            $AuthManager = new AuthManager();   
             $authResponse = $AuthManager->ReAuthorize();
             if(isset($authResponse)){
                $ActivityManager = new ActivityManager();

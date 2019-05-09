@@ -12,6 +12,7 @@
     if(isset($_GET['id'])){ 
         $activityResponse = $ActivityManager->Delete($_GET['id']);
         if($activityResponse->header_code == 401){ // UnAuthorised
+          $AuthManager = new AuthManager(); 
           $authResponse = $AuthManager->ReAuthorize();
           if(isset($authResponse)){
             $ActivityManager = new ActivityManager();

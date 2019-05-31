@@ -1,6 +1,6 @@
 # PHP-Sample App
 
-Sample code demonstrating OAuth and other features of Core API.
+A sample app demonstrating OAuth 2.0 and other features using Core API.
 
 ## Getting Started
 

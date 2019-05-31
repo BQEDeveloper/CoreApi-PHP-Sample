@@ -1,11 +1,11 @@
-# CoreAPI-PHP-Sample
+# PHP-Sample App
 
 Sample code demonstrating OAuth and other features of Core API.
 
 ## Getting Started
 
   1. Clone the Core API-PHP-Sample project on your local environment.
-  2. Go to Config.ini, insert the client_secret, client_id and redirectURI of you app. Please note the redirectURI should point to the        index.php file of the project
+  2. Go to Config.ini, insert the client_secret, client_id and redirect_uri of you app. Please note the redirect_uri should point to the        index.php file of the project
      e.g. if you are running PHP on your localhost with port 1111, the redirectURI might look something like
      http://localhost:1111/CoreApi-PHP-Sample
   3. Run the project. 
@@ -14,7 +14,7 @@ Sample code demonstrating OAuth and other features of Core API.
 
 To successfully run this app, you need the following:
 
-  * A [Core Developer Portal](https://api-developer.bqecore.com/webapp) account
+  * A Core [developer](https://api-developer.bqecore.com/webapp) account
   * An app on Developer Portal and the associated client_id, client_secret and redirect_URI
   * Core Sandbox/Production company
   * A PHP environment comprising of Apache. You can download it from [Xampp](https://www.apachefriends.org/download.html).
@@ -27,10 +27,10 @@ To successfully run this app, you need the following:
 ### Querying
 We allow the following simple filters on different endpoints:
 
-  * Fields - To specify only those model properties which you want in the response body
-  * Where -  To specify only those records that match the query expression
-  * Order By - To specify by which field you want to order the item list
-  * Page -  To specify the page number and number of records on each page
+  * fields - To specify only those model properties which you want in the response body
+  * where -  To specify only those records that match the query expression
+  * orderBy - To specify by which field you want to order the item list
+  * page -  To specify the page number and number of records on each page
 
 Core API allows operators to manipulate individual data items and return a result set. To know more go to [Core Operators](https://api-explorer.bqecore.com/docs/filtering#filter-operators)
 

@@ -18,12 +18,4 @@ A PHP environment comprising of Apache. You can download them from [Xampp](https
 
 * [PHP 5.6](http://php.net/releases/5_6_0.php)
 
-## Contributers
-[Umer Hafeez](https://github.com/Umer-Hafeez)
-
-
-
-## Author
-[Arif Nazir](https://github.com/arifnazir)
-
 

@@ -17,7 +17,7 @@ To successfully run this app, you need the following:
   * A [Core Developer Portal](https://api-developer.bqecore.com/webapp) account
   * An app on Developer Portal and the associated client_id, client_secret and redirect_URI
   * Core Sandbox/Production company
-A PHP environment comprising of Apache. You can download them from [Xampp](https://www.apachefriends.org/download.html).
+  * A PHP environment comprising of Apache. You can download it from [Xampp](https://www.apachefriends.org/download.html).
 
 ### What is supported?
   1. Authorization 

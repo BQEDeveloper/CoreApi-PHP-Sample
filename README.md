@@ -5,8 +5,8 @@ A sample app demonstrating OAuth 2.0 and other features using Core API.
 ## Getting Started
 
   1. Clone the Core API-PHP-Sample project on your local environment.
-  2. Go to Config.ini, insert the client_secret, client_id and redirect_uri of you app. Please note the redirect_uri should point to the        index.php file of the project
-     e.g. if you are running PHP on your localhost with port 1111, the redirectURI might look something like
+  2. Go to Config.ini and insert the client_secret, client_id and redirect_uri of your app. Please note the redirect_uri should point to the        index.php file of the project.
+     As an example, if you are running PHP on your localhost with port 1111, the redirect_uri might look something like
      http://localhost:1111/CoreApi-PHP-Sample
   3. Run the project. 
 
@@ -15,7 +15,7 @@ A sample app demonstrating OAuth 2.0 and other features using Core API.
 To successfully run this app, you need the following:
 
   * A Core [developer](https://api-developer.bqecore.com/webapp) account
-  * An app on Developer Portal and the associated client_id, client_secret and redirect_URI
+  * An app on Developer Portal and the associated client_id, client_secret and redirect_uri
   * Core Sandbox/Production company
   * A PHP environment comprising of Apache. You can download it from [Xampp](https://www.apachefriends.org/download.html).
 

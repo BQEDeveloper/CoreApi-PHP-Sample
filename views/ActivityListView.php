@@ -51,7 +51,7 @@
       }
    }
    catch(Exception $ex){
-      echo $ex->getMessage();
+      echo "<div style='color:red'>" . $ex->getMessage() . "</div>";
    }
    ?>
    <h2 style="text-align:center">Core API - PHP Sample</h2>
@@ -101,7 +101,7 @@
    
       }
       catch(Exception $ex){
-         echo $ex->getMessage();
+         echo "<div style='color:red'>" . $ex->getMessage() . "</div>";
       }
 
       function PrintList($activityList){
@@ -129,7 +129,7 @@
             echo '</table>';
          }
          catch(Exception $ex){
-            echo $ex->getMessage();
+            echo "<div style='color:red'>" . $ex->getMessage() . "</div>";
          }
       }
    

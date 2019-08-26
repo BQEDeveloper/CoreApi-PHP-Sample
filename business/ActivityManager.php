@@ -27,7 +27,7 @@
 
       function GetList() {
          try{
-            return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/query?page=0,100&orderby=name',$this->headers);
+            return APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity?page=0,100&orderby=name',$this->headers);
          }
          catch(Exception $ex){
             throw $ex;

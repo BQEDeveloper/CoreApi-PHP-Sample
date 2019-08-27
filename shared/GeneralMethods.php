@@ -19,30 +19,7 @@
             catch(Exception $ex){
                throw $ex;
             }
-        }
-
-        public static function SaveAuthResponse($authResponse) {
-            try{
-                $AuthResponseFile = fopen(realpath(__DIR__ . '/..')."/AuthResponse.ini", "w+") or die("Unable to open file!");
-                fwrite($AuthResponseFile, serialize($authResponse));
-                fclose($AuthResponseFile);
-            }
-            catch(Exception $ex){
-               throw $ex;
-            }
-        }
-
-        public static function GetAuthResponse() {
-            try{            
-                $AuthResponseFile = fopen(realpath(__DIR__ . '/..')."/AuthResponse.ini", "r+") or die("Unable to open file!");
-                $authResponse =  fread($AuthResponseFile,6000);
-                fclose($AuthResponseFile);
-                return unserialize($authResponse);                                         
-            }
-            catch(Exception $ex){
-                throw $ex;
-            }
-        }
+        }        
 
         public static function GenerateRandomString($length = 20) {
             try {

@@ -12,22 +12,7 @@
 
     // Load Activity
     if(isset($_GET['id']) && !isset($_POST['submit'])){ 
-      $activityResponse = $ActivityManager->Get($_GET['id']);
-      if($activityResponse->header_code == 401){ // UnAuthorised
-        $AuthManager = new AuthManager(); 
-        $authResponse = $AuthManager->ReAuthorize();
-        if(isset($authResponse)){
-          $ActivityManager = new ActivityManager();
-          $activityResponse = $ActivityManager->Get($_GET['id']);
-          $activity = json_decode($activityResponse->body);
-        }
-      }
-      else if($activityResponse->header_code == 200){ // Success 
-        $activity = json_decode($activityResponse->body);
-      } 
-      else {
-        echo "<p style='color:red'>".$activityResponse->body."</p>";
-      }  
+        $activity = $ActivityManager->Get($_GET['id']);       
     }
 
     //Check if form was submitted for Update / Create 
@@ -42,41 +27,18 @@
         if(isset($_GET['id'])){ //update
           $activity->id = $_GET['id'];
           $data = json_encode($activity);
-          $activityResponse = $ActivityManager->Update($activity->id,$data);
+          $ActivityManager->Update($activity->id,$data);
         }
         else { //create
           $data = json_encode($activity);
-          $activityResponse = $ActivityManager->Create($data);
+          $ActivityManager->Create($data);
         }
-
-        if($activityResponse->header_code == 401){ // UnAuthorised
-          $AuthManager = new AuthManager();
-          $authResponse = $AuthManager->ReAuthorize();
-          if(isset($authResponse)){
-            if(isset($_GET['id'])){ //update
-              $activity->id = $_GET['id'];
-              $data = json_encode($activity);
-              $ActivityManager = new ActivityManager();
-              $activityResponse = $ActivityManager->Update($activity->id,$data);
-            }
-            else { //create
-              $data = json_encode($activity);
-              $activityResponse = $ActivityManager->Create($data);
-            }
-            if($activityResponse->header_code == 200 || $activityResponse->header_code == 201) // Success or created
-              header("Location: ActivityListView.php");
-          }
-        }
-        else if($activityResponse->header_code == 200 || $activityResponse->header_code == 201){ // Success or created
-          header("Location: ActivityListView.php");
-        } 
-        else {
-          echo "<p style='color:red'>".$activityResponse->body."</p>";
-        }  
+        
+        header("Location: ActivityListView.php");  
     }
   }
   catch(Exception $ex){
-    echo $ex->getMessage();
+    echo "<p style='color:red'>".$ex->getMessage()."</p>";
   }
 ?>
 <!DOCTYPE html>

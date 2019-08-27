@@ -1,5 +1,6 @@
 <?php
     require_once(realpath(__DIR__ . '/..').'/models/AuthResponseModel.php');
+    require_once(realpath(__DIR__ . '/..').'/models/HttpHeaderModel.php');
     require_once(realpath(__DIR__ . '/..').'/shared/APIHelper.php'); 
     require_once(realpath(__DIR__ . '/..').'/shared/GeneralMethods.php');
 
@@ -8,22 +9,17 @@
       public $config;
       public $authResponse;
       public $httpResponse;
-      public $headers;
+      public $httpHeader;
 
       function __Construct() {
          $this->config = GeneralMethods::GetConfig();
           
          $this->authResponse = new AuthResponseModel();
-         $this->httpResponse = new HttpResponseModel(); 
+         $this->httpResponse = new HttpResponseModel();
+         $this->httpHeader = new HttpHeaderModel();
 
-         if(GeneralMethods::GetAuthResponse() != null)
-            $this->authResponse = GeneralMethods::GetAuthResponse();
- 
-         $this->headers = array( 
-            "accept: application/json",       
-            "authorization: Bearer " . $this->authResponse->access_token,
-            "content-type: application/json",
-         );
+         if($this->GetAuthResponse() != null)
+            $this->authResponse = $this->GetAuthResponse();
       }
 
       function ConnectToCore() {
@@ -34,9 +30,7 @@
 
       function DisconnectFromCore() {
          try{
-            $this->headers = array(        
-               "content-type: application/x-www-form-urlencoded",
-            );
+            $this->httpHeader->contentType = "application/x-www-form-urlencoded";
             
             $dataArray = array(
                "token" => $this->authResponse->access_token,
@@ -46,9 +40,9 @@
 
             $data = http_build_query($dataArray);
 
-            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/revocation',$data,$this->headers);
+            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/revocation',$data,$this->httpHeader);
             if($this->httpResponse->header_code == 200){
-               GeneralMethods::SaveAuthResponse('');
+               $this->SaveAuthResponse('');
                header("Location: ../index.php");
             }
          }
@@ -59,9 +53,7 @@
 
       function Authorize($code) {
          try{
-            $this->headers = array(        
-               "content-type: application/x-www-form-urlencoded",
-            );
+            $this->httpHeader->contentType = "application/x-www-form-urlencoded";
             
             $dataArray = array(
                "code" => $code,
@@ -73,7 +65,7 @@
       
             $data = http_build_query($dataArray);
       
-             $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->headers);
+            $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->httpHeader);
 
             if($this->httpResponse->header_code == 200)
                $this->authResponse =  json_decode($this->httpResponse->body);                           
@@ -89,12 +81,10 @@
 
       function ReAuthorize() {
          try {
-            if(GeneralMethods::GetAuthResponse() != null){
-               $auth = GeneralMethods::GetAuthResponse();
+            if($this->GetAuthResponse() != null){
+               $auth = $this->GetAuthResponse();
 
-               $headers = array(        
-                  "content-type: application/x-www-form-urlencoded",
-               );
+               $this->httpHeader->contentType = "application/x-www-form-urlencoded";
                
                $dataArray = array(
                   "refresh_token" => $auth->refresh_token,
@@ -105,11 +95,11 @@
 
                $data = http_build_query($dataArray);
 
-               $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$headers);
+               $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->httpHeader);
 
                if($this->httpResponse->header_code == 200) {
                   $this->authResponse =  json_decode($this->httpResponse->body);
-                  GeneralMethods::SaveAuthResponse($this->authResponse);
+                  $this->SaveAuthResponse($this->authResponse);
                }
 
                return $this->authResponse;
@@ -128,6 +118,29 @@
             throw $ex;
          }
       }
+
+      public function SaveAuthResponse($authResponse) {
+         try{
+             $AuthResponseFile = fopen(realpath(__DIR__ . '/..')."/AuthResponse.ini", "w+") or die("Unable to open file!");
+             fwrite($AuthResponseFile, serialize($authResponse));
+             fclose($AuthResponseFile);
+         }
+         catch(Exception $ex){
+            throw $ex;
+         }
+     }
+
+     public function GetAuthResponse() {
+         try{            
+             $AuthResponseFile = fopen(realpath(__DIR__ . '/..')."/AuthResponse.ini", "r+") or die("Unable to open file!");
+             $authResponse =  fread($AuthResponseFile,6000);
+             fclose($AuthResponseFile);
+             return unserialize($authResponse);                                         
+         }
+         catch(Exception $ex){
+             throw $ex;
+         }
+     }
    }
       
     

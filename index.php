@@ -31,22 +31,22 @@
 
       $config = GeneralMethods::GetConfig();   
 
-      $AuthManager = new AuthManager();                  
+      $authManager = new AuthManager();                  
       $authResponse = new AuthResponseModel();
       $jwt = new JWTModel();
       
       //Authenticate (Code Exchange)
       if(isset($_GET['code'])){
          //verfiy that the state parameter returned by the server is the same that was sent earlier.
-         if($AuthManager->IsValidState($_GET['state'])){
-            $authResponse = $AuthManager->Authorize($_GET['code']);            
+         if($authManager->IsValidState($_GET['state'])){
+            $authResponse = $authManager->Authorize($_GET['code']);            
             $JWTManager = new JWTManager($config,$authResponse->id_token);
             //Decode id_token (JWT)     
             $jwt = $JWTManager->DecodeJWT();
             //Validate the Decoded Token
             if($JWTManager->ValidateJWT($jwt)){
                //Save Auth Response
-               GeneralMethods::SaveAuthResponse($authResponse);
+               $authManager->SaveAuthResponse($authResponse);
             }
             else
                throw new Exception("Invalid JWT.");
@@ -56,14 +56,14 @@
       }      
 
       //Load Activity List
-      if(GeneralMethods::GetAuthResponse() != null){
+      if($authManager->GetAuthResponse() != null){
          header("Location: views/ActivityListView.php");
          exit();
       }
       
       //Connect To Core
       if(array_key_exists('btnConnectToCore',$_POST)){
-         $AuthManager->ConnectToCore();
+         $authManager->ConnectToCore();
       }  
    }
    catch(Exception $ex){

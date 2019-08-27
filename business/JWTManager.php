@@ -10,6 +10,7 @@
 
       public $config;      
       public $httpResponse;
+      public $httpHeader;
       public $id_token;
       public $jwt;
       public $jwks;
@@ -20,15 +21,11 @@
          $this->id_token = $id_token;
           
          $this->httpResponse = new HttpResponseModel(); 
+         $this->httpHeader = new HttpHeaderModel();
          $this->jwt = new JWTModel();
          $this->jwks = new JWKSModel();
 
-         $this->headers = array( 
-            "accept: application/json",       
-            "content-type: application/json",
-         );
-
-         $this->httpResponse = APIHelper::Get($this->config->CoreIdentityBaseUrl .'/.well-known/openid-configuration/jwks',$this->headers);
+         $this->httpResponse = APIHelper::Get($this->config->CoreIdentityBaseUrl .'/.well-known/openid-configuration/jwks',$this->httpHeader);
          $this->jwks =  json_decode($this->httpResponse->body)->keys[0];
          
       }
@@ -51,7 +48,7 @@
       function ValidateJWT($jwt) {
          try {  
             $this->jwt = $jwt;         
-            return $this->ValidateJWTHeader() && $this->ValidateJWTPayload() && $this->VerifyJWTSingature() ? true : false;
+            return $this->ValidateJWTHeader() && $this->ValidateJWTPayload() && $this->VerifyJWTSingature();
          }
          catch(Exception $ex) {
             throw $ex;

@@ -4,13 +4,20 @@
 
     class APIHelper {    
 
-        public static function Get($url,$headers) {
+        public static function Get(String $url, HttpHeaderModel $httpHeader) {
             try {
                 $curl = new CurlModel();
                 $httpResponse = new HttpResponseModel();
                 curl_setopt($curl->ch, CURLOPT_URL, $url);
-                if($headers)
+                if(isset($httpHeader)){
+                    $headers = array (
+                        "user-agent: ". $httpHeader->userAgent,
+                        "content-type: ". $httpHeader->contentType                        
+                    );
+                    if(isset($httpHeader->authorization))
+                        array_push($headers,"authorization: ". $httpHeader->authorization);
                     curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                }
                 // CURL EXECUTE:
                 $httpResponse->response = curl_exec($curl->ch);
                 $header_size = curl_getinfo($curl->ch, CURLINFO_HEADER_SIZE);
@@ -29,14 +36,22 @@
             }
         }
 
-        public static function Post($url,$data,$headers) {
+        public static function Post(String $url, $data, HttpHeaderModel $httpHeader) {
             try {
                 $curl = new CurlModel();
                 $httpResponse = new HttpResponseModel();
                 curl_setopt($curl->ch, CURLOPT_POST, 1);
                 if ($data)
                     curl_setopt($curl->ch, CURLOPT_POSTFIELDS, $data);
-                curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                if(isset($httpHeader)){
+                    $headers = array (
+                        "user-agent: ". $httpHeader->userAgent,
+                        "content-type: ". $httpHeader->contentType                        
+                    );
+                    if(isset($httpHeader->authorization))
+                        array_push($headers,"authorization: ". $httpHeader->authorization);
+                    curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                }
                 curl_setopt($curl->ch, CURLOPT_URL, $url);            
 
                 // CURL EXECUTE:
@@ -58,7 +73,7 @@
             }
         }
 
-        public static function Put($url,$data,$headers) {
+        public static function Put(String $url, $data, HttpHeaderModel $httpHeader) {
 
             try{
                 $curl = new CurlModel();
@@ -66,7 +81,15 @@
                 curl_setopt($curl->ch, CURLOPT_CUSTOMREQUEST, "PUT");
                 if ($data)
                     curl_setopt($curl->ch, CURLOPT_POSTFIELDS, $data);
-                curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                if(isset($httpHeader)){
+                    $headers = array (
+                        "user-agent: ". $httpHeader->userAgent,
+                        "content-type: ". $httpHeader->contentType                        
+                    );
+                    if(isset($httpHeader->authorization))
+                        array_push($headers,"authorization: ". $httpHeader->authorization);
+                    curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                }
                 curl_setopt($curl->ch, CURLOPT_URL, $url);            
 
                 // CURL EXECUTE:
@@ -88,14 +111,21 @@
             }
         }
 
-        public static function Delete($url,$headers) {
+        public static function Delete(String $url, HttpHeaderModel $httpHeader) {
             try{
                 $curl = new CurlModel();
                 $httpResponse = new HttpResponseModel();
                 curl_setopt($curl->ch, CURLOPT_CUSTOMREQUEST, "DELETE");
                 curl_setopt($curl->ch, CURLOPT_URL, $url);
-                if($headers)
+                if(isset($httpHeader)){
+                    $headers = array (
+                        "user-agent: ". $httpHeader->userAgent,
+                        "content-type: ". $httpHeader->contentType                        
+                    );
+                    if(isset($httpHeader->authorization))
+                        array_push($headers,"authorization: ". $httpHeader->authorization);
                     curl_setopt($curl->ch, CURLOPT_HTTPHEADER, $headers);
+                }
                 // CURL EXECUTE:
                 $httpResponse->response = curl_exec($curl->ch);
                 $header_size = curl_getinfo($curl->ch, CURLINFO_HEADER_SIZE);

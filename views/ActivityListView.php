@@ -34,28 +34,16 @@
       require_once(realpath(__DIR__ . '/..').'/business/UserInfoManager.php');
 
       //get the User Info
-      //$UserInfoManager = new UserInfoManager();
-      //$userInfoResponse = $UserInfoManager->GetUserInfo();  
+      $UserInfoManager = new UserInfoManager();
+      $userInfo = $UserInfoManager->GetUserInfo();  
             
-      // if($userInfoResponse->header_code == 401){ // UnAuthorised  
-      //    $AuthManager = new AuthManager();     
-      //    $authResponse = $AuthManager->ReAuthorize();
-      //    if(isset($authResponse)){
-      //       $UserInfoManager = new UserInfoManager();
-      //       $userInfoResponse = $UserInfoManager->GetUserInfo();
-      //       $userInfo = json_decode($userInfoResponse->body);
-      //    }
-      // }
-      // else if($userInfoResponse->header_code == 200){ // Success
-      //    $userInfo = json_decode($userInfoResponse->body);
-      // }
    }
    catch(Exception $ex){
       echo "<div style='color:red'>" . $ex->getMessage() . "</div>";
    }
    ?>
    <h2 style="text-align:center">Core API - PHP Sample</h2>
-   <h4 style="text-align:center" title="Company"><?php //echo $userInfo->company ?></h4>
+   <h4 style="text-align:center" title="Company"><?php echo $userInfo->company ?></h4>
    <div style="text-align:center">
       <form method="post">
             <input type="submit" class="btn btn-danger" name="btnDisconnectFromCore" id="btnDisconnectFromCore" value="Disconnect from Core" />

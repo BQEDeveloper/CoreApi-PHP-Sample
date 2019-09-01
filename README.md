@@ -43,7 +43,7 @@ Core API allows operators to manipulate individual data items and return a resul
 
 ## Built With
 
-  * [PHP 5.6](http://php.net/releases/5_6_0.php)
+  * [PHP 7.*.*](https://www.php.net/downloads.php)
   
 ## Framework and Version
    | Package| Version|

@@ -13,7 +13,7 @@
     class JWTHeader {
         public $alg;
         public $kid;
-        public $type;
+        public $typ;
         public $x5t;
     }
 

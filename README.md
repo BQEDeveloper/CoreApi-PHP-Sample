@@ -5,9 +5,13 @@ A sample app demonstrating OAuth 2.0 and other features using Core API.
 ## Getting Started
 
   1. Clone the Core API-PHP-Sample project on your local environment.
-  2. Go to Config.ini and insert the client_secret, client_id and redirect_uri of your app. Please note the redirect_uri should point to the        index.php file of the project.
-     As an example, if you are running PHP on your localhost with port 1111, the redirect_uri will look like
-     http://localhost:1111/CoreApi-PHP-Sample. Note: The redirect_uri of your app should exactly match with the redirect_uri in your config file.
+  2. Go to Config.ini and insert the client_secret, client_id and redirect_uri of your app. Please note the redirect_uri should point to the index.php file of the project.
+  
+  #### Note: 
+  The responses during the OAuth process, including access_token, referesh_token, etc., are stored in the AuthResponse.ini file. As a    best practice, you should store it in a database.
+  
+  As an example, if you are running PHP on your localhost with port 1111, the redirect_uri will look like
+  http://localhost:1111/CoreApi-PHP-Sample. Note: The redirect_uri of your app should exactly match with the redirect_uri in your config file.
   ### Example:
 
   | Registered Redirect URI| Redirect URI Parameter Passed To Authorize| Valid |

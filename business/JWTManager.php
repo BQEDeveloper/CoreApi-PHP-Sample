@@ -4,7 +4,7 @@
     require_once(realpath(__DIR__ . '/..').'/shared/APIHelper.php'); 
     require_once(realpath(__DIR__ . '/..').'/shared/GeneralMethods.php');
     require_once(realpath(__DIR__ . '/..').'/packages/phpseclib/Crypt/RSA.php');
-    require_once(realpath(__DIR__ . './..').'/packages/phpseclib/Crypt/Math/BigInteger.php');
+    require_once(realpath(__DIR__ . '/..').'/packages/phpseclib/Crypt/Math/BigInteger.php');
 
     class JWTManager {
 

@@ -7,7 +7,6 @@
                 $config = new ConfigModel();
                 $configArray = parse_ini_file(realpath(__DIR__ . '/..')."/config.ini");
                 //foreach($configArray  as $x => $x_value) { echo "Key = " . $x . ", Value = " . $x_value; }
-                $config->CoreAPIBaseUrl = $configArray["CoreAPIBaseUrl"];
                 $config->CoreIdentityBaseUrl = $configArray["CoreIdentityBaseUrl"];
                 $config->Secret = $configArray["Secret"];
                 $config->ClientID = $configArray["ClientID"];

@@ -36,7 +36,7 @@
 
       function GetList() {
          try{
-            $this->httpResponse = APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity?page=0,100&orderby=name',$this->httpHeader);
+            $this->httpResponse = APIHelper::Get($this->authResponse->endpoint.'/activity?page=0,100&orderby=name',$this->httpHeader);
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();
@@ -59,7 +59,7 @@
       function Get(String $id) {
          try{                     
 
-            $this->httpResponse = APIHelper::Get($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->httpHeader);
+            $this->httpResponse = APIHelper::Get($this->authResponse->endpoint.'/activity/'.$id,$this->httpHeader);
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();
@@ -82,7 +82,7 @@
 
       function Create($data) {   
          try {      
-            $this->httpResponse = APIHelper::Post($this->config->CoreAPIBaseUrl.'/activity',$data,$this->httpHeader);   
+            $this->httpResponse = APIHelper::Post($this->authResponse->endpoint.'/activity',$data,$this->httpHeader);   
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();
@@ -104,7 +104,7 @@
 
       function Update(String $id, $data) {
          try {         
-            $this->httpResponse =  APIHelper::Put($this->config->CoreAPIBaseUrl.'/activity/'.$id,$data,$this->httpHeader);
+            $this->httpResponse =  APIHelper::Put($this->authResponse->endpoint.'/activity/'.$id,$data,$this->httpHeader);
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();
@@ -127,7 +127,7 @@
 
       function Delete(String $id) {  
          try {       
-            $this->httpResponse =  APIHelper::Delete($this->config->CoreAPIBaseUrl.'/activity/'.$id,$this->httpHeader);
+            $this->httpResponse =  APIHelper::Delete($this->authResponse->endpoint.'/activity/'.$id,$this->httpHeader);
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();

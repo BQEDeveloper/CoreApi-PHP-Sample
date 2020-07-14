@@ -36,7 +36,7 @@
 
       function GetList() {
          try{
-            $this->httpResponse = APIHelper::Get($this->authResponse->endpoint.'/activity?page=0,100&orderby=name',$this->httpHeader);
+            $this->httpResponse = APIHelper::Get($this->authResponse->endpoint.'/activity?page=0,1000&orderby=name',$this->httpHeader);
 
             if($this->httpResponse->header_code == 401){ // UnAuthorised       
                $this->authResponse = $this->authManager->ReAuthorize();

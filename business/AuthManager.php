@@ -67,8 +67,11 @@
       
             $this->httpResponse = APIHelper::Post($this->config->CoreIdentityBaseUrl .'/connect/token',$data,$this->httpHeader);
 
-            if($this->httpResponse->header_code == 200)
+            if($this->httpResponse->header_code == 200){
                $this->authResponse =  json_decode($this->httpResponse->body);                           
+               if(substr($this->authResponse->endpoint, -1) == '/')
+                  $this->authResponse->endpoint = substr($this->authResponse->endpoint, 0, -1);
+            }
             else 
                throw new Exception($this->httpResponse);
 
@@ -99,6 +102,8 @@
 
                if($this->httpResponse->header_code == 200) {
                   $this->authResponse =  json_decode($this->httpResponse->body);
+                  if(substr($this->authResponse->endpoint, -1) == '/')
+                     $this->authResponse->endpoint = substr($this->authResponse->endpoint, 0, -1);
                   $this->SaveAuthResponse($this->authResponse);
                }
 
